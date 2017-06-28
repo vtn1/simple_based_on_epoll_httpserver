@@ -8,9 +8,9 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdbool.h>
-
-#include <sys/errno.h>
 #include "simplehttp.h"
+#include <sys/errno.h>
+
 #define minb  256
 int listenfd;
 /*
@@ -50,10 +50,11 @@ void setnoblocking(int fd)
 void do_events(void *arg){
     int epfd=*((int *)(arg));
     int nfds;
-    struct epoll_event events[100];
+    printf("thread %d\n",epfd);
+    struct epoll_event events[2500];
     while(1)
     {
-        nfds=epoll_wait(epfd,events,300,-1);
+        nfds=epoll_wait(epfd,events,2500,-1);
        // printf("nfds:%d\n",nfds);
         for(int i=0;i<nfds;++i)
         {
@@ -123,7 +124,7 @@ int main(int argc ,char *argv[])
 
     socklen_t clilen=sizeof(cliaddr);
     for (int i = 0; i < 4; ++i) {
-    epfd[i]=epoll_create(1024);
+    epfd[i]=epoll_create(5000);
     }
     //Conn *webconn=(Conn *)malloc(sizeof(Conn));
     //webconn->fd=listenfd;

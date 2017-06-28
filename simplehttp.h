@@ -66,7 +66,7 @@ void del_epoll_event_close_fd(int epfd,Conn *conn)
 }
 void http_read(Conn * conn)
 {
-    //signal(SIGPIPE,SIG_IGN);
+    signal(SIGPIPE,SIG_IGN);
     (*(conn->conn_read))(conn);
     //Simhttp_accept_quest(conn);
     //printf("%x");
@@ -276,7 +276,7 @@ void Simhttp_server_static(Conn *conn)
     Simhttp_send_header(fd,filename);
 
     fgets(buf,sizeof(buf),filefd);
-    //send(fd,buf,strlen(buf),0);
+
     while(!feof(filefd)&&n>=0)
     {
         n=send(fd,buf,strlen(buf),0);
